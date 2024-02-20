@@ -1,0 +1,17 @@
+
+HTTPPort : 4571
+ServiceName : uploadapi
+BasePath : http://localhost
+HttpRequestLimit : 10
+
+#config database dev local
+DBType : mongodb
+DBUser : root
+DBPassword : root_password
+DBHost : mongodb://localhost:27019/
+DBName : data
+ 
+# configFusionAuth
+FusionAppId : 40bcbe08-2cf8-45e2-a59f-c4c6613f4def
+FusionAPIKey : e-i-2CPYQav-cNsEaYf7rgJzfcKpZK02kARkSpbOPXLzd8zSNVT9Aj1x
+FusionHost : http://localhost:9012
