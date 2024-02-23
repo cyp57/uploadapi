@@ -10,6 +10,6 @@ DBUser : root
 DBPassword : root_password
 DBHost : mongodb://localhost:27019/
 DBName : data
- 
+
 # path for save file
 RootFile : D:/tmp/file

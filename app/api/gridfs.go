@@ -10,20 +10,20 @@ import (
 	"github.com/cyp57/uploadapi/app/response"
 	"github.com/cyp57/uploadapi/utils"
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 func InitApi() IApi {
-	return &api{&GridfsApi{}}
+	return &api{&GridfsApi{}, &FileserverApi{}}
 }
 
 type IApi interface {
 	Gridfs() IGridfsApi
+	Fileserver() IFileserverApi
 }
 
 type api struct {
-	gridfs *GridfsApi
-	// fileServer
+	gridfs     *GridfsApi
+	fileserver *FileserverApi
 }
 
 func (a *api) Gridfs() IGridfsApi {
@@ -40,7 +40,7 @@ type IGridfsApi interface {
 type GridfsApi struct{}
 
 var responseHandler = response.Response()
-var sizeLimit int64 = 10000000
+var sizeLimit int64 = 10000000  // 10 mb
 
 func (g *GridfsApi) UploadFile(c *gin.Context) {
 
@@ -78,7 +78,7 @@ func (g *GridfsApi) UploadFile(c *gin.Context) {
 	if err != nil {
 		responseHandler.ErrResponse(c, http.StatusInternalServerError, err.Error())
 	} else {
-		responseHandler.SuccessResponse(c, http.StatusOK, bson.M{"id": result}, "Upload success")
+		responseHandler.SuccessResponse(c, http.StatusOK, result, "Upload success")
 	}
 }
 

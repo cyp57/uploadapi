@@ -12,7 +12,8 @@ type app struct {
 	httpPort         string
 	httpRequestLimit int
 	serviceName      string
-	basePath   string
+	basePath         string
+	rootFile         string
 }
 
 type db struct {
@@ -32,6 +33,7 @@ type IAppConfig interface {
 	ServiceName() string
 	HttpRequestLimit() int
 	BasePath() string
+	RootFile() string
 }
 
 type IDbConfig interface {
@@ -57,6 +59,9 @@ func (a *app) HttpRequestLimit() int {
 func (a *app) BasePath() string {
 	return a.basePath
 }
+func (a *app) RootFile() string {
+	return a.rootFile
+}
 
 func (c *config) Db() IDbConfig {
 	return c.db
@@ -75,7 +80,6 @@ func (d *db) DbHost() string {
 func (d *db) DbName() string {
 	return d.dbName
 }
-
 
 type IConfig interface {
 	App() IAppConfig
@@ -101,11 +105,13 @@ func LoadConfig(envPath, yamlPath string) IConfig {
 	} else {
 		utils.SetViperYaml(viperYaml)
 	}
-	
+
 	return &config{&app{httpPort: utils.GetYaml("HTTPPort"),
 		serviceName:      utils.GetYaml("ServiceName"),
-		basePath: utils.GetYaml("BasePath"),
+		basePath:         utils.GetYaml("BasePath"),
+		rootFile: utils.GetYaml("RootFile"),
 		httpRequestLimit: utils.GetYamlInt("HttpRequestLimit")},
+		
 		&db{dbUser: utils.GetYaml("DBUser"),
 			dbPassword: utils.GetYaml("DBPassword"),
 			dbHost:     utils.GetYaml("DBHost"),

@@ -19,13 +19,14 @@ var ApiEndpointSetting = &ApiEndpoint{}
 
 type Collection struct {
 	GridFsCollection string
+	FileserverCollection string
 }
 
 var CollectionSetting = &Collection{}
 
 var cfg *ini.File
 
-// Setup initialize the configuration instance
+// initialize .ini
 func InitIni(iniPath string) {
 
 	var err error

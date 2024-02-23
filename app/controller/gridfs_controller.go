@@ -17,6 +17,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+//upload file with gridfs
+
 type GridFs struct {
 	Id       string
 	FileName string
@@ -25,10 +27,6 @@ type GridFs struct {
 	Data     []byte
 }
 
-//id
-//fileName
-//fileType
-//fileSize
 
 func (g *GridFs) UploadFile() (interface{}, error) {
 
@@ -63,7 +61,12 @@ func (g *GridFs) UploadFile() (interface{}, error) {
 	defer bucket.SetWriteDeadline(time.Now().Add(10 * time.Second))
 	log.Printf("Write file to DB was successful. File size: %d\n", fileSize)
 
-	return &id, nil
+	url := path.Join(utils.GetYaml("BasePath")+":"+utils.GetYaml("HTTPPort"), utils.GetYaml("ServiceName"), "gridfs/file", id +"." +g.FileType)
+	
+	result := bson.M{"id": id , "url" : url}
+
+
+	return result, nil
 }
 
 func (g *GridFs) GetFileDetail(id string) (interface{}, error) {
@@ -133,7 +136,6 @@ func (g *GridFs)DeleteFile(id string) (interface{} , error) {
 	var resultDb = primitive.M{}
     err := fileCollection.FindOne(context.TODO(), bson.M{"metadata.id": id}).Decode(&resultDb)
     if err != nil {
-        fmt.Printf("%v\n", err.Error())
         return nil ,err
     }
     bucket, _ := gridfs.NewBucket(
@@ -141,7 +143,6 @@ func (g *GridFs)DeleteFile(id string) (interface{} , error) {
     )
 
     if err := bucket.Delete(resultDb["_id"]); err != nil && err != gridfs.ErrFileNotFound {
-        fmt.Printf("%v\n", err.Error())
         return nil ,err
     }
     defer bucket.SetReadDeadline(time.Now().Add(10 * time.Second))
