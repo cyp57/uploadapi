@@ -8,7 +8,7 @@ HttpRequestLimit : 10
 DBType : mongodb
 DBUser : root
 DBPassword : root_password
-DBHost : mongodb://localhost:27019/
+DBHost : mongodb://localhost:27020/
 DBName : data
  
 # path for save file
